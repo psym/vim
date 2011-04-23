@@ -2,3 +2,6 @@
 	path = bundle/fugitive
 	url = http://github.com/tpope/vim-fugitive.git
     ignore = dirty
+[submodule "bundle/vimerl"]
+	path = bundle/vimerl
+	url = http://github.com/oscarh/vimerl.git
