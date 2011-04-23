@@ -9,7 +9,7 @@ nnoremap ; :
 " quickly edit/reload vimrc
 nmap <silent> <leader>ev :e $MYVIMRC<cr>
 nmap <silent> <leader>sv :so $MYVIMRC<cr>
-autocmd! bufwritepost $MYVIMRC source $MYVIMRC 
+autocmd! bufwritepost $MYVIMRC source $MYVIMRC
 
 
 """" Movement
@@ -19,9 +19,9 @@ noremap k gk
 
 """" Searching and Patterns
 set ignorecase							" search is case insensitive
-set smartcase							" search case sensitive if caps on 
+set smartcase							" search case sensitive if caps on
 set incsearch							" show best match so far
-set hlsearch							" Highlight matches to the search 
+set hlsearch							" Highlight matches to the search
 nmap <silent> ,/ :nohlsearch            " clear highlights
 
 "toggle spell checking
@@ -81,9 +81,6 @@ cnoremap <ESC>f     <S-Right>
 cnoremap <ESC><C-F> <S-Right>
 cnoremap <ESC><C-H> <C-W>
 
-" we don't want to edit these type of files
-set wildignore=*.o,*.obj,*.bak,*.exe,*.pyc,*.swp
-
 " disable gui menu bar
 "set guioptions=ac
 
@@ -108,6 +105,8 @@ set foldlevelstart=99					" All folds open by default
 
 """" Command Line
 set wildmenu							" Autocomplete features in the status bar
+set wildmode=list:longest
+set wildignore=*.o,*.obj,*.bak,*.exe,*.pyc,*.swp   " we don't want to edit these type of files
 
 """" Autocommands
 if has("autocmd")
@@ -150,6 +149,7 @@ au!
 
 	augroup END
 endif
+
 
 """" Key Mappings
 "jj in insert mode switches to normal
@@ -241,13 +241,13 @@ nmap <leader>tp :tabprevious<cr>
 nmap <leader>te :tabedit<cr>
 
 if &diff
-" easily handle diffing 
+" easily handle diffing
    vnoremap < :diffget<CR>
    vnoremap > :diffput<CR>
 else
 " visual shifting (builtin-repeat)
-   vnoremap < <gv                       
-   vnoremap > >gv 
+   vnoremap < <gv
+   vnoremap > >gv
 endif
 
 " git bindings for Fugitive
