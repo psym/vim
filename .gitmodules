@@ -2,9 +2,9 @@
 	path = bundle/fugitive
 	url = http://github.com/tpope/vim-fugitive.git
     ignore = dirty
-[submodule "bundle/vimerl"]
-	path = bundle/vimerl
-	url = http://github.com/oscarh/vimerl.git
 [submodule "bundle/vim-rebar"]
 	path = bundle/vim-rebar
 	url = http://github.com/mbbx6spp/vim-rebar
+[submodule "bundle/vimerl"]
+	path = bundle/vimerl
+	url = git://github.com/jimenezrick/vimerl.git
