@@ -5,3 +5,6 @@
 [submodule "bundle/vimerl"]
 	path = bundle/vimerl
 	url = http://github.com/oscarh/vimerl.git
+[submodule "bundle/vim-rebar"]
+	path = bundle/vim-rebar
+	url = http://github.com/mbbx6spp/vim-rebar
