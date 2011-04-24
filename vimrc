@@ -36,6 +36,8 @@ set scrolloff=3							" Keep 3 lines below and above the cursor
 set ruler								" line numbers and column the cursor is on
 set number								" Show line numbering
 set numberwidth=1						" Use 1 col + 1 space for numbers
+set title
+set titlestring=%F
 
 " tab labels show the filename without path(tail)
 set guitablabel=%N/\ %t\ %M
@@ -60,7 +62,7 @@ set statusline=%t[%{strlen(&fenc)?&fenc:'none'},%{&ff}]%h%m%r%y[%{fugitive#statu
 set statusline+=%=%{v:register}\ %c,%l/%L\ %P
 
 """" Editing
-set backspace=2							" Backspace over anything! (Super backspace!)
+set backspace=indent,eol,start  		" Backspace over anything! (Super backspace!)
 set showmatch							" Briefly jump to the previous matching paren
 set matchtime=2							" For .2 seconds
 set formatoptions-=tc					" I can format for myself, thank you very much
@@ -308,3 +310,14 @@ function! StripTrailingWhitespace()
 endfunction
 
 au BufWritePre *.c,*.h call StripTrailingWhitespace()
+
+" toggle between number and relative number on ,l
+nnoremap <leader>l :call ToggleRelativeAbsoluteNumber()<CR>
+function! ToggleRelativeAbsoluteNumber()
+    if &number
+        set relativenumber
+    else
+        set number
+    endif
+endfunction
+
