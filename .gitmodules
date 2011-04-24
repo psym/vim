@@ -8,3 +8,6 @@
 [submodule "bundle/vimerl"]
 	path = bundle/vimerl
 	url = git://github.com/jimenezrick/vimerl.git
+[submodule "bundle/vim-align"]
+	path = bundle/vim-align
+	url = http://github.com/tsaleh/vim-align
