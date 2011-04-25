@@ -14,3 +14,4 @@
 [submodule "bundle/vim-git"]
 	path = bundle/vim-git
 	url = http://github.com/tpope/vim-git
+    ignore = dirty
