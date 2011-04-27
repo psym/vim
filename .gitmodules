@@ -15,3 +15,9 @@
 	path = bundle/vim-git
 	url = http://github.com/tpope/vim-git
     ignore = dirty
+[submodule "bundle/supertab"]
+	path = bundle/supertab
+	url = http://github.com/ervandew/supertab.git
+[submodule "bundle/yankring"]
+	path = bundle/yankring
+	url = git://github.com/vim-scripts/YankRing.vim

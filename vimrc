@@ -43,9 +43,9 @@ set guitablabel=%N/\ %t\ %M
 
 """ Windows
 if exists(":tab")						" Try to move to other windows if changing buf
-	set switchbuf=useopen,usetab
+    set switchbuf=useopen,usetab
 else									" Try other windows & tabs if available
-		set switchbuf=useopen
+    set switchbuf=useopen
 endif
 
 """" Messages, Info, Status
@@ -111,44 +111,44 @@ set wildignore=*.o,*.obj,*.bak,*.exe,*.pyc,*.swp   " we don't want to edit these
 
 """" Autocommands
 if has("autocmd")
-augroup vimrcEx
-au!
-	" In plain-text files and svn commit buffers, wrap automatically at 78 chars
-	au FileType text,svn setlocal tw=78 fo+=t
+    augroup vimrcEx
+        au!
+        " In plain-text files and svn commit buffers, wrap automatically at 78 chars
+        au FileType text,svn setlocal tw=78 fo+=t
 
-	" In all files, try to jump back to the last spot cursor was in before exiting
-	au BufReadPost *
-		\ if line("'\"") > 0 && line("'\"") <= line("$") |
-		\   exe "normal g`\"" |
-		\ endif
+        " In all files, try to jump back to the last spot cursor was in before exiting
+        au BufReadPost *
+                    \ if line("'\"") > 0 && line("'\"") <= line("$") |
+                    \   exe "normal g`\"" |
+                    \ endif
 
-	" Use :make to check a script with perl
-	au FileType perl set makeprg=perl\ -c\ %\ $* errorformat=%f:%l:%m
+        " Use :make to check a script with perl
+        au FileType perl set makeprg=perl\ -c\ %\ $* errorformat=%f:%l:%m
 
-	" Use :make to compile c, even without a makefile
-	au FileType c,cpp if glob('Makefile') == "" | let &mp="gcc -o %< %" | endif
+        " Use :make to compile c, even without a makefile
+        au FileType c,cpp if glob('Makefile') == "" | let &mp="gcc -o %< %" | endif
 
-	" Switch to the directory of the current file, unless it's a help file.
-	au BufEnter * if &ft != 'help' | silent! cd %:p:h | endif
+        " Switch to the directory of the current file, unless it's a help file.
+        au BufEnter * if &ft != 'help' | silent! cd %:p:h | endif
 
-	" Insert Vim-version as X-Editor in mail headers
-	au FileType mail sil 1  | call search("^$")
-				 \ | sil put! ='X-Editor: Vim-' . Version()
+        " Insert Vim-version as X-Editor in mail headers
+        au FileType mail sil 1  | call search("^$")
+                    \ | sil put! ='X-Editor: Vim-' . Version()
 
-	" smart indenting for python
-	au FileType python set smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class
+        " smart indenting for python
+        au FileType python set smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class
 
-	" allows us to run :make and get syntax errors for our python scripts
-	au FileType python set makeprg=python\ -c\ \"import\ py_compile,sys;\ sys.stderr=sys.stdout;\ py_compile.compile(r'%')\"
-	" setup file type for code snippets
-	au FileType python if &ft !~ 'django' | setlocal filetype=python.django_tempate.django_model | endif
-	au FileType python set expandtab
+        " allows us to run :make and get syntax errors for our python scripts
+        au FileType python set makeprg=python\ -c\ \"import\ py_compile,sys;\ sys.stderr=sys.stdout;\ py_compile.compile(r'%')\"
+        " setup file type for code snippets
+        au FileType python if &ft !~ 'django' | setlocal filetype=python.django_tempate.django_model | endif
+        au FileType python set expandtab
 
-	" kill calltip window if we move cursor or leave insert mode
-	au CursorMovedI * if pumvisible() == 0|pclose|endif
-	au InsertLeave * if pumvisible() == 0|pclose|endif
+        " kill calltip window if we move cursor or leave insert mode
+        au CursorMovedI * if pumvisible() == 0|pclose|endif
+        au InsertLeave * if pumvisible() == 0|pclose|endif
 
-	augroup END
+    augroup END
 endif
 
 
@@ -242,13 +242,13 @@ nmap <leader>tp :tabprevious<cr>
 nmap <leader>te :tabedit<cr>
 
 if &diff
-" easily handle diffing
-   vnoremap < :diffget<CR>
-   vnoremap > :diffput<CR>
+    " easily handle diffing
+    vnoremap < :diffget<CR>
+    vnoremap > :diffput<CR>
 else
-" visual shifting (builtin-repeat)
-   vnoremap < <gv
-   vnoremap > >gv
+    " visual shifting (builtin-repeat)
+    vnoremap < <gv
+    vnoremap > >gv
 endif
 
 " git bindings for Fugitive
@@ -292,19 +292,19 @@ inoremap <Down> <C-R>=pumvisible() ? "\<lt>C-N>" : "\<lt>Down>"<CR>
 " Remove trailing whitespace from code files on save
 function! StripTrailingWhitespace()
 
-  " store current cursor location
-  silent exe "normal ma<CR>"
-  " store the current search value
-  let saved_search = @/
+    " store current cursor location
+    silent exe "normal ma<CR>"
+    " store the current search value
+    let saved_search = @/
 
 
-  " delete the whitespace (e means don't warn if pattern not found)
-  %s/\s\+$//e
+    " delete the whitespace (e means don't warn if pattern not found)
+    %s/\s\+$//e
 
-  " restore old cursor location
-  silent exe "normal `p<CR>"
-  " restore the search value
-  let @/ = saved_search
+    " restore old cursor location
+    silent exe "normal `p<CR>"
+    " restore the search value
+    let @/ = saved_search
 
 endfunction
 
@@ -319,4 +319,23 @@ function! ToggleRelativeAbsoluteNumber()
         set number
     endif
 endfunction
+
+map <leader>del :g/^\s*$/d<CR>          " Delete Empty Lines
+map <leader>ddql :%s/^>\s*>.*//g<CR>    " Delete Double Quoted Lines
+map <leader>ddr :s/\.\+\s*/. /g<CR>     " Delete Dot Runs
+map <leader>dsr :s/\s\s\+/ /g<CR>       " Delete Space Runs
+map <leader>dtw :%s/\s\+$//g<CR>        " Delete Trailing Whitespace
+
+noremap <leader>= gg=G                  " Reindent everything
+noremap <leader>gp gqap                 " Reformat paragraph
+noremap <leader>gq gggqG                " Reformat everything
+noremap <leader>gg ggVG                 " Select everything
+
+" Allow setting window title for screen
+if &term =~ '^screen'
+    set t_ts=k
+    set t_fs=\
+endif
+
+
 
