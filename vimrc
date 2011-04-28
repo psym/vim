@@ -338,4 +338,9 @@ if &term =~ '^screen'
 endif
 
 
+let g:erlangManPath = "/opt/local/lib/erlang/man/"
+let g:erlangCompleteFile = "~/.vim/bundle/vimerl/autoload/erlang_complete.erl"
+
+let g:SuperTabDefaultCompletionType = "<c-x><c-u>"      " Default onmi-complete
+let g:SuperTabLongestEnhanced=1
 
