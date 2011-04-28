@@ -21,6 +21,7 @@
 [submodule "bundle/yankring"]
 	path = bundle/yankring
 	url = git://github.com/vim-scripts/YankRing.vim
+    ignore = dirty
 [submodule "bundle/a"]
 	path = bundle/a
 	url = http://github.com/vim-scripts/a.vim
@@ -36,3 +37,4 @@
 [submodule "bundle/syntastic"]
 	path = bundle/syntastic
 	url = http://github.com/scrooloose/syntastic
+    ignore = dirty
