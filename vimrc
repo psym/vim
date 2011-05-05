@@ -27,7 +27,11 @@ nmap <silent> ,/ :nohlsearch            " clear highlights
 map <leader>ss :setlocal spell!<cr>
 
 """" Display
-colorscheme elflord
+if has("gui_running")
+    colorscheme inkpot
+else
+    colorscheme elflord
+endif
 set background=dark						" I use dark background
 "set lazyredraw							" Don't repaint when scripts are running
 set hidden                              " Allow unchanged buffers to hide
@@ -35,7 +39,7 @@ set scrolloff=3							" Keep 3 lines below and above the cursor
 set ruler								" line numbers and column the cursor is on
 set number								" Show line numbering
 set numberwidth=1						" Use 1 col + 1 space for numbers
-set title
+" set title
 set titlestring=%F
 
 " tab labels show the filename without path(tail)
