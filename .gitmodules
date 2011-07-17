@@ -38,3 +38,6 @@
 	path = bundle/syntastic
 	url = http://github.com/scrooloose/syntastic
     ignore = dirty
+[submodule "bundle/haskellmode-vim"]
+	path = bundle/haskellmode-vim
+	url = git://github.com/lukerandall/haskellmode-vim.git
