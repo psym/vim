@@ -44,6 +44,3 @@
 [submodule "bundle/cscope-macros"]
 	path = bundle/cscope-macros
 	url = https://github.com/vim-scripts/cscope_macros.vim.git
-[submodule "bundle/vimpdb"]
-	path = bundle/vimpdb
-	url = https://github.com/vim-scripts/VimPdb.git
