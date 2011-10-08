@@ -144,8 +144,6 @@ if has("autocmd")
 
         " allows us to run :make and get syntax errors for our python scripts
         au FileType python set makeprg=python\ -c\ \"import\ py_compile,sys;\ sys.stderr=sys.stdout;\ py_compile.compile(r'%')\"
-        " setup file type for code snippets
-        au FileType python if &ft !~ 'django' | setlocal filetype=python.django_tempate.django_model | endif
         au FileType python set expandtab
 
         " kill calltip window if we move cursor or leave insert mode
@@ -356,10 +354,12 @@ let g:haddock_indexfiledir="/tmp/haddock/"
 let g:erlangManPath = "/opt/local/lib/erlang/man/"
 let g:erlangCompleteFile = "~/.vim/bundle/vimerl/autoload/erlang_complete.erl"
 
-let g:SuperTabDefaultCompletionType = "<c-x><c-u>"      " Default onmi-complete
+"let g:SuperTabDefaultCompletionType = "<c-x><c-u>"      " Default onmi-complete
+let g:SuperTabDefaultCompletionType = "context"
 let g:SuperTabLongestEnhanced=1
 
-autocmd FileType erlang let g:SuperTabDefaultCompletionType = "<c-x><c-o>"
+au FileType erlang let g:SuperTabDefaultCompletionType = "<c-x><c-o>"
+au FileType python set omnifunc=pythoncomplete#Complete
 
 let g:yankring_history_dir = '~/.vim'
 

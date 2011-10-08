@@ -47,3 +47,4 @@
 [submodule "bundle/pyflakes"]
 	path = bundle/pyflakes
 	url = https://github.com/mitechie/pyflakes-pathogen.git
+    ignore = dirty
