@@ -41,3 +41,9 @@
 [submodule "bundle/haskellmode-vim"]
 	path = bundle/haskellmode-vim
 	url = git://github.com/lukerandall/haskellmode-vim.git
+[submodule "bundle/cscope-macros"]
+	path = bundle/cscope-macros
+	url = https://github.com/vim-scripts/cscope_macros.vim.git
+[submodule "bundle/pyflakes"]
+	path = bundle/pyflakes
+	url = https://github.com/mitechie/pyflakes-pathogen.git

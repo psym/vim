@@ -341,6 +341,17 @@ if &term =~ '^screen'
     set t_fs=\
 endif
 
+" haskell stuff
+au Bufenter *.sh compiler ghc
+au Filetype haskell set completeopt-=longest
+au FileType haskell let g:SuperTabDefaultCompletionType = "<c-x><c-o>"
+let g:ghc = "/usr/bin/ghc"
+let g:haddock_docdir = "/Library/Haskell/doc/"
+"Mac
+let g:haddock_browser = "open"
+let g:haddock_browser_callformat = "%s %s"
+let g:haddock_indexfiledir="/tmp/haddock/"
+
 
 let g:erlangManPath = "/opt/local/lib/erlang/man/"
 let g:erlangCompleteFile = "~/.vim/bundle/vimerl/autoload/erlang_complete.erl"
@@ -349,4 +360,6 @@ let g:SuperTabDefaultCompletionType = "<c-x><c-u>"      " Default onmi-complete
 let g:SuperTabLongestEnhanced=1
 
 autocmd FileType erlang let g:SuperTabDefaultCompletionType = "<c-x><c-o>"
+
+let g:yankring_history_dir = '~/.vim'
 
