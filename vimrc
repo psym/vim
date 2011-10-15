@@ -312,7 +312,7 @@ function! StripTrailingWhitespace()
 
 endfunction
 
-au BufWritePre *.c,*.h call StripTrailingWhitespace()
+au BufWritePre *.c,*.h,*.py call StripTrailingWhitespace()
 
 " toggle between number and relative number on ,l
 nnoremap <leader>l :call ToggleRelativeAbsoluteNumber()<CR>
