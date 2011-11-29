@@ -100,6 +100,10 @@ syntax on								" Turn on syntax highlighting
 " set up tags
 set tags=./tags;/
 set tags+=$HOME/.vim/tags/python.ctags
+" open tag in hoizontal split
+map <C-\> :sp <CR>:exec("tag ".expand("<cword>"))<CR>
+" open tag in vertical split
+map <A-\> :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
 
 " build tags of cur dir with CTRL+F12
 map <C-F12> :!ctags -R .<CR>
