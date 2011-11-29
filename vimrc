@@ -5,6 +5,7 @@ set nocompatible
 let mapleader=","
 nnoremap ; :
 
+
 " quickly edit/reload vimrc
 nmap <silent> <leader>ev :e $MYVIMRC<cr>
 nmap <silent> <leader>sv :so $MYVIMRC<cr>
@@ -357,6 +358,9 @@ let g:erlangCompleteFile = "~/.vim/bundle/vimerl/autoload/erlang_complete.erl"
 "let g:SuperTabDefaultCompletionType = "<c-x><c-u>"      " Default onmi-complete
 let g:SuperTabDefaultCompletionType = "context"
 let g:SuperTabLongestEnhanced=1
+
+"au FileType c set omnifunc=syntaxcomplete#Complete
+au FileType c let g:SuperTabDefaultCompletionType = "<c-x><c-o>"
 
 au FileType erlang let g:SuperTabDefaultCompletionType = "<c-x><c-o>"
 au FileType python set omnifunc=pythoncomplete#Complete
