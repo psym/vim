@@ -105,8 +105,23 @@ map <C-\> :sp <CR>:exec("tag ".expand("<cword>"))<CR>
 " open tag in vertical split
 map <A-\> :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
 
+let g:ctag_filename = "tags"
+let g:ctag_args = "-R --c++-kinds=+pl --fields=+iaS --extra=+q --language-force=C++"
+let g:ctag_exe  = "ctags"
+function! UpdateTags()
+    let tag_file = findfile("tags", ".;")
+    if (filereadable(tag_file))
+        echo "Updated tag file: " . tag_file
+        let e = system(g:ctag_exe.' '.g:ctag_args.' -f '.tag_file.' '.expand('%'))
+    else
+        echo "No tag file found"
+    endif
+endfunction
+
 " build tags of cur dir with CTRL+F12
-map <C-F12> :!ctags -R .<CR>
+map <C-F12> :call UpdateTags()<CR>
+" rebuild tags of current c/h file when saving
+au BufWritePost *.c,*.h :call UpdateTags()
 
 
 """"" Folding
@@ -315,7 +330,7 @@ function! StripTrailingWhitespace()
 
 endfunction
 
-au BufWritePre *.c,*.h call StripTrailingWhitespace()
+"au BufWritePre *.c,*.h call StripTrailingWhitespace()
 
 " toggle between number and relative number on ,l
 nnoremap <leader>l :call ToggleRelativeAbsoluteNumber()<CR>
