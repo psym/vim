@@ -313,21 +313,9 @@ inoremap <Down> <C-R>=pumvisible() ? "\<lt>C-N>" : "\<lt>Down>"<CR>
 
 " Remove trailing whitespace from code files on save
 function! StripTrailingWhitespace()
-
-    " store current cursor location
-    silent exe "normal ma<CR>"
-    " store the current search value
-    let saved_search = @/
-
-
-    " delete the whitespace (e means don't warn if pattern not found)
-    %s/\s\+$//e
-
-    " restore old cursor location
-    silent exe "normal `p<CR>"
-    " restore the search value
-    let @/ = saved_search
-
+    let l:winview = winsaveview()
+    silent! %s/\s\+$//
+    call winrestview(l:winview)
 endfunction
 
 au BufWritePre *.c,*.h,*.py call StripTrailingWhitespace()
