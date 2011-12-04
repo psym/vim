@@ -5,6 +5,7 @@ set nocompatible
 let mapleader=","
 nnoremap ; :
 
+
 " quickly edit/reload vimrc
 nmap <silent> <leader>ev :e $MYVIMRC<cr>
 nmap <silent> <leader>sv :so $MYVIMRC<cr>
@@ -99,9 +100,28 @@ syntax on								" Turn on syntax highlighting
 " set up tags
 set tags=./tags;/
 set tags+=$HOME/.vim/tags/python.ctags
+" open tag in hoizontal split
+map <C-\> :sp <CR>:exec("tag ".expand("<cword>"))<CR>
+" open tag in vertical split
+map <A-\> :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
+
+let g:ctag_filename = "tags"
+let g:ctag_args = "-R --c++-kinds=+pl --fields=+iaS --extra=+q --language-force=C++"
+let g:ctag_exe  = "ctags"
+function! UpdateTags()
+    let tag_file = findfile("tags", ".;")
+    if (filereadable(tag_file))
+        echo "Updated tag file: " . tag_file
+        let e = system(g:ctag_exe.' '.g:ctag_args.' -f '.tag_file.' '.expand('%'))
+    else
+        echo "No tag file found"
+    endif
+endfunction
 
 " build tags of cur dir with CTRL+F12
-map <C-F12> :!ctags -R .<CR>
+map <C-F12> :call UpdateTags()<CR>
+" rebuild tags of current c/h file when saving
+au BufWritePost *.c,*.h :call UpdateTags()
 
 
 """"" Folding
@@ -144,8 +164,6 @@ if has("autocmd")
 
         " allows us to run :make and get syntax errors for our python scripts
         au FileType python set makeprg=python\ -c\ \"import\ py_compile,sys;\ sys.stderr=sys.stdout;\ py_compile.compile(r'%')\"
-        " setup file type for code snippets
-        au FileType python if &ft !~ 'django' | setlocal filetype=python.django_tempate.django_model | endif
         au FileType python set expandtab
 
         " kill calltip window if we move cursor or leave insert mode
@@ -356,10 +374,15 @@ let g:haddock_indexfiledir="/tmp/haddock/"
 let g:erlangManPath = "/opt/local/lib/erlang/man/"
 let g:erlangCompleteFile = "~/.vim/bundle/vimerl/autoload/erlang_complete.erl"
 
-let g:SuperTabDefaultCompletionType = "<c-x><c-u>"      " Default onmi-complete
+"let g:SuperTabDefaultCompletionType = "<c-x><c-u>"      " Default onmi-complete
+let g:SuperTabDefaultCompletionType = "context"
 let g:SuperTabLongestEnhanced=1
 
-autocmd FileType erlang let g:SuperTabDefaultCompletionType = "<c-x><c-o>"
+"au FileType c set omnifunc=syntaxcomplete#Complete
+au FileType c let g:SuperTabDefaultCompletionType = "<c-x><c-o>"
+
+au FileType erlang let g:SuperTabDefaultCompletionType = "<c-x><c-o>"
+au FileType python set omnifunc=pythoncomplete#Complete
 
 let g:yankring_history_dir = '~/.vim'
 
