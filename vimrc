@@ -371,6 +371,7 @@ au FileType c let g:SuperTabDefaultCompletionType = "<c-x><c-o>"
 
 au FileType erlang let g:SuperTabDefaultCompletionType = "<c-x><c-o>"
 au FileType python set omnifunc=pythoncomplete#Complete
+au FileType python set completeopt=menuone,longest,preview
 
 let g:yankring_history_dir = '~/.vim'
 
