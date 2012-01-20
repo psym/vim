@@ -375,3 +375,5 @@ au FileType python set completeopt=menuone,longest,preview
 
 let g:yankring_history_dir = '~/.vim'
 
+let g:pep8_map='<leader>8'
+au FileType python let g:SuperTabDefaultCompletionType = "context"
