@@ -3,66 +3,32 @@ call pathogen#helptags()
 
 set nocompatible
 let mapleader=","
-nnoremap ; :
 
-set nobackup
-set nowritebackup
-set noswapfile
+syntax on                       " Turn on syntax highlighting
+filetype plugin on              " Enable filetype plugins
+filetype indent on              " Let filetype plugins indent for me
 
-""" GreenHills MULTI
-"paths from multi have escaped backslashes
-map <Leader>cd :cd %:p:h:gs/\\\\/\\/<CR>
-
-function! FixMultiPath()
-    edit %:t
-    bprevious
-    bdelete
-endfunction
-map <Leader>mu :call FixMultiPath()<CR>
-
-
-" quickly edit/reload vimrc
+" Edit/Reload vimrc
 nmap <silent> <leader>ev :e $MYVIMRC<cr>
 nmap <silent> <leader>sv :so $MYVIMRC<cr>
-autocmd! bufwritepost $MYVIMRC source $MYVIMRC
+au! BufWritePost $MYVIMRC source $MYVIMRC
 
-
-"""" Movement
-" work more logically with wrapped lines
-noremap j gj
-noremap k gk
-
-"""" Searching and Patterns
-set ignorecase                          " search is case insensitive
-set smartcase                           " search case sensitive if caps on
-set incsearch                           " show best match so far
-set hlsearch                            " Highlight matches to the search
-nmap <silent> ,/ :nohlsearch            " clear highlights
-
-"toggle spell checking
-map <leader>ss :setlocal spell!<cr>
 
 """" Display
+set background=dark                     " I use dark background
 if has("gui_running")
     colorscheme inkpot
     set sessionoptions+=resize,winpos
     set lines=55 columns=130
     set guifont=Consolas:h9:cANSI
+    set guitablabel=%N/\ %t\ %M         " tab labels show the filename without path(tail)
+
+    set guioptions+=c                   " Use console dialogs instead of popups
+    set guioptions+=a 
+    set guioptions-=T                   " No toolbar
 else
     colorscheme elflord
 endif
-set background=dark                     " I use dark background
-"set lazyredraw                         " Don't repaint when scripts are running
-set hidden                              " Allow unchanged buffers to hide
-set scrolloff=3                         " Keep 3 lines below and above the cursor
-set ruler                               " line numbers and column the cursor is on
-set number                              " Show line numbering
-set numberwidth=1                       " Use 1 col + 1 space for numbers
-" set title
-set titlestring=%F
-
-" tab labels show the filename without path(tail)
-set guitablabel=%N/\ %t\ %M
 
 """ Windows
 if exists(":tab")                       " Try to move to other windows if changing buf
@@ -78,20 +44,55 @@ set ruler                               " Show pos below the win if there's no s
 set laststatus=2                        " Always show statusline, even if only 1 window
 set report=0                            " Notify me whenever any lines have changed
 set confirm                             " Y-N-C prompt if closing with unsaved changes
-set vb t_vb=                            " Disable visual bell!  I hate that flashing.
-"set statusline+=
+set vb t_vb=                            " Disable visual bell
 set statusline=%t[%{strlen(&fenc)?&fenc:'none'},%{&ff}]%h%m%r%y[%{fugitive#statusline()}]
 set statusline+=%=%{v:register}\ %c,%l/%L\ %P
+set listchars=tab:>-,eol:$,trail:-,precedes:<,extends:>
+"set lazyredraw                         " Don't repaint when scripts are running
+set number                              " Show line numbering
+set numberwidth=1                       " Use 1 col + 1 space for numbers
+" set title
+set titlestring=%F
+
 
 """" Editing
+set hidden                              " Allow unchanged buffers to hide
+set scrolloff=3                         " Keep 3 lines below and above the cursor
 set backspace=indent,eol,start          " Backspace over anything! (Super backspace!)
 set showmatch                           " Briefly jump to the previous matching paren
 set matchtime=2                         " For .2 seconds
 set formatoptions-=tc                   " I can format for myself, thank you very much
-set tabstop=4                           " Tab stop of 4
+set tabstop=4                           " <tab> inserts 4 spaces
 set shiftwidth=4                        " sw 4 spaces (used on auto indent)
 set softtabstop=4                       " 4 spaces as a tab for bs/del
-set expandtab
+set expandtab                           " Use spaces instead of tabs for autoindent/tab key
+set history=1000                        " 1000 Lines of history
+set showfulltag                         " Show more information while completing tags
+set foldmethod=indent                   " Allow folding on indents
+set foldlevel=99                        " Don't fold by default
+
+""" Reading/Writing
+set nobackup                        " No backups
+set nowritebackup                   " Even when overwriting
+set noswapfile                      " Don't use swap files
+set noautowrite                     " Never write a file unless I request if.
+set noautowriteall                  " Never
+set noautoread                      " Don't automatically re-read changed files
+set ffs=unix,dos,mac
+
+"""" Searching and Patterns
+set ignorecase                          " Default to using case insensitive searches
+set smartcase                           " unless uppercase is used in regex.
+set hlsearch                            " Highlight matches to the search
+set incsearch                           " Incrementally search
+nmap <silent> ,/ :nohlsearch<CR>        " Clear highlights
+
+
+"""" Command Line
+set wildmenu                            " Autocomplete features in the status bar
+set wildmode=list:longest
+set wildignore+=*.o,*.obj,*.bak,*.exe,*.pyc,*.swp   " we don't want to edit these type of files
+
 " allow command line editing like emacs
 cnoremap <C-A>      <Home>
 cnoremap <C-B>      <Left>
@@ -105,169 +106,73 @@ cnoremap <ESC>f     <S-Right>
 cnoremap <ESC><C-F> <S-Right>
 cnoremap <ESC><C-H> <C-W>
 
-" disable gui menu bar
-"set guioptions=ac
-
-"""" Coding
-set history=1000                        " 1000 Lines of history
-set showfulltag                         " Show more information while completing tags
-filetype plugin on                      " Enable filetype plugins
-filetype plugin indent on               " Let filetype plugins indent for me
-syntax on                               " Turn on syntax highlighting
-
-" set up tags
-set tags=./tags;/
-set tags+=$HOME/.vim/tags/python.ctags
-"set tags+=$HOME/vimfiles/tags/python.ctags
-"set tags+=$HOME/vimfiles/tags/integrity.ctags
-
-" open tag in hoizontal split
-map <C-\> :sp <CR>:exec("tag ".expand("<cword>"))<CR>
-" open tag in vertical split
-map <A-\> :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
-
-let g:ctag_filename = "tags"
-let g:ctag_args = "-R --append=yes --c-kinds=+pl --c++-kinds=+pl --fields=+iaS --extra=+q"
-let g:ctag_exe  = "ctags"
-function! UpdateTags()
-    let tag_file = findfile("tags", ".;")
-    if (filereadable(tag_file))
-        echo "Updated tag file: " . tag_file
-        let e = system(g:ctag_exe.' '.g:ctag_args.' -f '.tag_file.' '.expand('%'))
-        "let g:e = system(g:ctag_exe.' '.g:ctag_args.' -f C:"'.expand(tag_file).'" '.expand('%'))
-    else
-        echo "No tag file found"
-    endif
-endfunction
-
-" build tags of cur dir with CTRL+F12
-map <C-F12> :call UpdateTags()<CR>
-" rebuild tags of current c/h file when saving
-au BufWritePost *.c,*.h :call UpdateTags()
-
-
-""""" Folding
-set foldmethod=syntax                   " By default, use syntax to determine folds
-set foldlevelstart=99                   " All folds open by default
-
-"""" Command Line
-set wildmenu                            " Autocomplete features in the status bar
-set wildmode=list:longest
-set wildignore=*.o,*.obj,*.bak,*.exe,*.pyc,*.swp   " we don't want to edit these type of files
 
 """" Autocommands
-if has("autocmd")
-    augroup vimrcEx
-        au!
-        " In plain-text files and svn commit buffers, wrap automatically at 78 chars
-        au FileType text,svn setlocal tw=78 fo+=t
+augroup vimrcEx
+    au!
+    " In plain-text files and svn/git commit buffers, wrap automatically at 78 chars
+    au FileType text,svn,gitcommit setlocal tw=78 fo+=t
 
-        " In all files, try to jump back to the last spot cursor was in before exiting
-        au BufReadPost *
-                    \ if line("'\"") > 0 && line("'\"") <= line("$") |
-                    \   exe "normal g`\"" |
-                    \ endif
+    " Restore previous cursor position
+    au BufWinEnter * call RestoreCursor()
 
-        " Use :make to check a script with perl
-        au FileType perl set makeprg=perl\ -c\ %\ $* errorformat=%f:%l:%m
+    " Switch to the directory of the current file, unless it's a help file.
+    au BufEnter * if &ft != 'help' | silent! cd %:p:h | endif
 
-        " Use :make to compile c, even without a makefile
-        au FileType c,cpp if glob('Makefile') == "" | let &mp="gcc -o %< %" | endif
+    "autocmd BufEnter,BufReadPre * silent! cd %:p:h:gs/\\\\/\\/
 
-        " Switch to the directory of the current file, unless it's a help file.
-        au BufEnter * if &ft != 'help' | silent! cd %:p:h | endif
-        "autocmd BufEnter,BufReadPre * silent! cd %:p:h:gs/\\\\/\\/
-
-        " Insert Vim-version as X-Editor in mail headers
-        au FileType mail sil 1  | call search("^$")
-                    \ | sil put! ='X-Editor: Vim-' . Version()
-
-        " smart indenting for python
-        au FileType python set smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class
-
-        " allows us to run :make and get syntax errors for our python scripts
-        au FileType python set makeprg=python\ -c\ \"import\ py_compile,sys;\ sys.stderr=sys.stdout;\ py_compile.compile(r'%')\"
-        au FileType python set expandtab
-
-        " kill calltip window if we move cursor or leave insert mode
-        au CursorMovedI * if pumvisible() == 0|pclose|endif
-        au InsertLeave * if pumvisible() == 0|pclose|endif
-
-    augroup END
-endif
+    " kill calltip window if we move cursor or leave insert mode
+    au CursorMovedI * if pumvisible() == 0|pclose|endif
+    au InsertLeave * if pumvisible() == 0|pclose|endif
+augroup END
 
 
 """" Key Mappings
-"jj in insert mode switches to normal
-imap jj <Esc>
+" work more logically with wrapped lines
+noremap j gj
+noremap k gk
 
-" toggle paste mode
-nmap <leader>p :set invpaste paste?<cr>
+nnoremap ; :
+imap jj <Esc>                               " jj in insert mode switches to normal
+nmap <leader>p :set invpaste paste?<cr>     " toggle paste mode
+nmap <leader>rr :1,$retab<CR>               " Retab file
+nmap <F4> :TlistToggle<CR>                  " Toggle the tag list bar
+map - :Explore<cr>
+cmap w!! %!sudo tee > /dev/null %
 
-"set up retabbing on a source file
-nmap <leader>rr :1,$retab<CR>
+nmap <leader>c :copen<CR>                   " Open quickfix window
+nmap <leader>cc :cclose<CR>                 " Close quickfix window
+nmap <leader>cq :call setqflist([])<CR>     " Clear quickfix window
+
+map <leader>ss :setlocal spell!<cr>     " Toggle spell checking
 
 " bind ctrl+space for omnicompletion
 inoremap <Nul> <C-x><C-o>
 imap <c-space> <c-x><c-o>
-"inoremap <expr> <C-Space> pumvisible() \|\| &omnifunc == '' ?
-"            \ "\<lt>C-n>" :
-"            \ "\<lt>C-x>\<lt>C-o><c-r>=pumvisible() ?" .
-"            \ "\"\\<lt>c-n>\\<lt>c-p>\\<lt>c-n>\" :" .
-"            \ "\" \\<lt>bs>\\<lt>C-n>\"\<CR>"
-"imap <C-@> <C-Space>
-"only complete longest common
-set completeopt+=longest
 
-" Toggle the tag list bar
-nmap <F4> :TlistToggle<CR>
+" allow arrow keys when code completion window is up
+inoremap <Down> <C-R>=pumvisible() ? "\<lt>C-N>" : "\<lt>Down>"<CR>
 
-map - :Explore<cr>
+nnoremap <leader>l :call ToggleRelativeAbsoluteNumber()<CR>
+nmap <leader>sb :call SplitScroll()<CR>     " Vsplit with syncronized scrolling
+map <C-F12> :call UpdateTags()<CR>          " Build tags of cur dir with CTRL+F12
 
-cmap w!! %!sudo tee > /dev/null %
+imap <C-W> <C-O><C-W>               " Window commands work in insert mode
+noremap <silent> <leader>h :wincmd h<cr>   " Move the cursor to the window left of the current one
+noremap <silent> <leader>j :wincmd j<cr>   " Move the cursor to the window below the current one
+noremap <silent> <leader>k :wincmd k<cr>   " Move the cursor to the window above the current one
+noremap <silent> <leader>l :wincmd l<cr>   " Move the cursor to the window right of the current one
 
-" tab navigation (next tab) with alt left / alt right
-nnoremap  <a-right>  gt
-nnoremap  <a-left>   gT
+noremap <silent> <leader>cj :wincmd j<cr>:close<cr>    " Close the window below this one
+noremap <silent> <leader>ck :wincmd k<cr>:close<cr>    " Close the window above this one
+noremap <silent> <leader>ch :wincmd h<cr>:close<cr>    " Close the window to the left of this one
+noremap <silent> <leader>cl :wincmd l<cr>:close<cr>    " Close the window to the right of this one
+noremap <silent> <leader>cc :close<cr>                 " Close the current window
 
-" Move the cursor to the window left of the current one
-noremap <silent> ,h :wincmd h<cr>
-
-" Move the cursor to the window below the current one
-noremap <silent> ,j :wincmd j<cr>
-
-" Move the cursor to the window above the current one
-noremap <silent> ,k :wincmd k<cr>
-
-" Move the cursor to the window right of the current one
-noremap <silent> ,l :wincmd l<cr>
-
-" Close the window below this one
-noremap <silent> ,cj :wincmd j<cr>:close<cr>
-
-" Close the window above this one
-noremap <silent> ,ck :wincmd k<cr>:close<cr>
-
-" Close the window to the left of this one
-noremap <silent> ,ch :wincmd h<cr>:close<cr>
-
-" Close the window to the right of this one
-noremap <silent> ,cl :wincmd l<cr>:close<cr>
-
-" Close the current window
-noremap <silent> ,cc :close<cr>
-
-" Move the current window to the right of the main Vim window
-noremap <silent> ,ml <C-W>L
-
-" Move the current window to the top of the main Vim window
-noremap <silent> ,mk <C-W>K
-
-" Move the current window to the left of the main Vim window
-noremap <silent> ,mh <C-W>H
-
-" Move the current window to the bottom of the main Vim window
-noremap <silent> ,mj <C-W>J
+noremap <silent> <leader>ml <C-W>L     " Move the current window to the right of the main Vim window
+noremap <silent> <leader>mk <C-W>K     " Move the current window to the top of the main Vim window
+noremap <silent> <leader>mh <C-W>H     " Move the current window to the left of the main Vim window
+noremap <silent> <leader>mj <C-W>J     " Move the current window to the bottom of the main Vim window
 
 " Ctrl + Arrows - Move around quickly
 nnoremap  <c-up>     {
@@ -285,6 +190,8 @@ nnoremap  <s-left>   vh
 nmap <leader>tn :tabnext<cr>
 nmap <leader>tp :tabprevious<cr>
 nmap <leader>te :tabedit<cr>
+nnoremap  <a-right>  gt             " Next tab right
+nnoremap  <a-left>   gT             " Next tab left
 
 if &diff
     " easily handle diffing
@@ -305,53 +212,18 @@ nmap <leader>gd :Gdiff<cr>
 
 
 " Extra functionality for some existing commands:
-" <C-6> switches back to the alternate file and the correct column in the line.
-nnoremap <C-6> <C-6>`"
+nnoremap <C-6> <C-6>`"          " <C-6> switches back to the alternate file and the correct column in the line.
+nnoremap <C-g> 2<C-g>           " CTRL-g shows filename and buffer number, too.
+nnoremap q: q:iq<esc>           " I hate hitting q: instead of :q
+nnoremap <silent> <C-l> :nohl<CR><C-l>  " <C-l> redraws the screen and removes any search highlighting.
+noremap Q gq                    " Q formats paragraphs, instead of entering ex mode
 
-" CTRL-g shows filename and buffer number, too.
-nnoremap <C-g> 2<C-g>
+vnoremap * y/<C-R>"<CR>         " * search next in visual
+vnoremap # y?<C-R>"<CR>         " # search previous in visual
 
-" Arg!  I hate hitting q: instead of :q
-nnoremap q: q:iq<esc>
+nnoremap <space> za             " <space> toggles folds opened and closed
+vnoremap <space> zf             " <space> in visual mode creates a fold over the marked range
 
-" <C-l> redraws the screen and removes any search highlighting.
-nnoremap <silent> <C-l> :nohl<CR><C-l>
-
-" Q formats paragraphs, instead of entering ex mode
-noremap Q gq
-
-" * and # search for next/previous of selected text when used in visual mode
-vnoremap * y/<C-R>"<CR>
-vnoremap # y?<C-R>"<CR>
-
-" <space> toggles folds opened and closed
-nnoremap <space> za
-
-" <space> in visual mode creates a fold over the marked range
-vnoremap <space> zf
-
-" allow arrow keys when code completion window is up
-inoremap <Down> <C-R>=pumvisible() ? "\<lt>C-N>" : "\<lt>Down>"<CR>
-
-
-" Remove trailing whitespace from code files on save
-function! StripTrailingWhitespace()
-    let l:winview = winsaveview()
-    silent! %s/\s\+$//
-    call winrestview(l:winview)
-endfunction
-
-au BufWritePre *.c,*.h,*.py call StripTrailingWhitespace()
-
-" toggle between number and relative number on ,l
-nnoremap <leader>l :call ToggleRelativeAbsoluteNumber()<CR>
-function! ToggleRelativeAbsoluteNumber()
-    if &number
-        set relativenumber
-    else
-        set number
-    endif
-endfunction
 
 map <leader>del :g/^\s*$/d<CR>          " Delete Empty Lines
 map <leader>ddql :%s/^>\s*>.*//g<CR>    " Delete Double Quoted Lines
@@ -370,10 +242,72 @@ if &term =~ '^screen'
     set t_fs=\
 endif
 
-" haskell stuff
-au Bufenter *.sh compiler ghc
-au Filetype haskell set completeopt-=longest
-au FileType haskell let g:SuperTabDefaultCompletionType = "<c-x><c-o>"
+set completeopt+=longest    " Only complete longest common
+"let g:SuperTabDefaultCompletionType = "<c-x><c-u>"      " Default onmi-complete
+let g:SuperTabDefaultCompletionType = "context"
+let g:SuperTabLongestEnhanced=1
+
+let g:yankring_history_dir = '~/.vim'
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""" Functions
+" Update tags file
+function! UpdateTags()
+    let tag_file = findfile("tags", ".;")
+    if (filereadable(tag_file))
+        echo "Updated tag file: " . tag_file
+        let e = system(g:ctag_exe.' '.g:ctag_args.' -f '.tag_file.' '.expand('%'))
+        "let g:e = system(g:ctag_exe.' '.g:ctag_args.' -f C:"'.expand(tag_file).'" '.expand('%'))
+    else
+        echo "No tag file found"
+    endif
+endfunction
+
+" Vertical split current file with syncronized scrolling
+function! SplitScroll()
+    :wincmd v
+    :wincmd w
+    execute "normal! \<C-d>"
+    :set scrollbind
+    :wincmd w
+    :set scrollbind
+endfunction
+
+" Remove trailing whitespace
+function! StripTrailingWhitespace()
+    let l:winview = winsaveview()
+    silent! %s/\s\+$//
+    call winrestview(l:winview)
+endfunction
+
+" Toggle between absolute and relative numbering 
+function! ToggleRelativeAbsoluteNumber()
+    if &number
+        set relativenumber
+    else
+        set number
+    endif
+endfunction
+
+function! RestoreCursor()
+    if line("'\"") <= line("$")
+        normal! g`"
+        return 1
+    endif
+endfunction
+     
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""" Haskell
+augroup HaskellAuto
+    au!
+    au Filetype haskell compiler ghc 
+    au Filetype haskell set completeopt-=longest
+    au FileType haskell let g:SuperTabDefaultCompletionType = "<c-x><c-o>"
+augroup END
+
 let g:ghc = "/usr/bin/ghc"
 let g:haddock_docdir = "/Library/Haskell/doc/"
 "Mac
@@ -382,43 +316,79 @@ let g:haddock_browser_callformat = "%s %s"
 let g:haddock_indexfiledir="/tmp/haddock/"
 
 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""" Erlang
+augroup ErlangAuto
+    au!
+    au FileType erlang let g:SuperTabDefaultCompletionType = "<c-x><c-o>"
+augroup END
+
 let g:erlangManPath = "/opt/local/lib/erlang/man/"
 let g:erlangCompleteFile = "~/.vim/bundle/vimerl/autoload/erlang_complete.erl"
 
-"let g:SuperTabDefaultCompletionType = "<c-x><c-u>"      " Default onmi-complete
-let g:SuperTabDefaultCompletionType = "context"
-let g:SuperTabLongestEnhanced=1
 
-"au FileType c set omnifunc=syntaxcomplete#Complete
-au FileType c let g:SuperTabDefaultCompletionType = "<c-x><c-o>"
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""" Python
+augroup PythonAuto
+    au!
+    au BufWritePre *.py call StripTrailingWhitespace()
+    au Filetype python set omnifunc=pythoncomplete#Complete
+    au Filetype python set completeopt=menuone,longest,preview
+    au Filetype python set smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class,with
+    au FileType python set makeprg=python\ -c\ \"import\ py_compile,sys;\ sys.stderr=sys.stdout;\ py_compile.compile(r'%')\"
+    au FileType python set expandtab
+    au FileType python inoremap # #         " Don't outdent hashes
+augroup END
 
-au FileType erlang let g:SuperTabDefaultCompletionType = "<c-x><c-o>"
-au FileType python set omnifunc=pythoncomplete#Complete
-au FileType python set completeopt=menuone,longest,preview
-
-let g:yankring_history_dir = '~/.vim'
-
+let g:pyflakes_use_quickfix=0           "Using quickfix breaks pep8
 let g:pep8_map='<leader>8'
-au FileType python let g:SuperTabDefaultCompletionType = "context"
 
 
-""" Lint
-au Filetype c set efm=%f:%l:%c:%m
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""" C/C++
+augroup CAuto
+    au!
+    au BufWritePre *.c,*.h call StripTrailingWhitespace()
+    au BufWritePost *.c,*.h call UpdateTags()  " Update tags of current c/h file when saving
+    "au FileType c set omnifunc=syntaxcomplete#Complete
+    au FileType c let g:SuperTabDefaultCompletionType = "<c-x><c-o>"
+    " Use :make to compile c, even without a makefile
+    au FileType c,cpp if glob('Makefile') == "" | let &mp="gcc -o %< %" | endif
+    au Filetype c set efm=%f:%l:%c:%m       " Lint compatible
+augroup END
+
 function! Lint()
-    new   "new buffer
-    exec 'silent r! "R:\Software\Private\PC-Lint_v9\lint\Lint-nt" -iC:\pc-lint\ std.lnt local.lnt *.c +b'
-    exe "normal ggdd"
-    caddb    "add content of buffer to quickfix
-    close    "close buffer
-    copen    "open quickfix
-endfunction
-function! Lint2()
     call setqflist([])   "clear quickfix buffer
     cgetexpr system('"R:\Software\Private\PC-Lint_v9\lint\Lint-nt" -iC:\pc-lint\ std.lnt local.lnt +b *.c')
     copen
 endfunction
-map <Leader>lint :call Lint2()<CR>
+map <Leader>lint :call Lint()<CR>
 
-" clear quickfix
-map <Leader>cq :call setqflist([])<CR>
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""' CTags
+set tags=./tags;/
+set tags+=$HOME/.vim/tags/python.ctags
+"set tags+=$HOME/vimfiles/tags/python.ctags
+"set tags+=$HOME/vimfiles/tags/integrity.ctags
+
+let g:ctag_filename = "tags"
+let g:ctag_args = "-R --append=yes --c-kinds=+pl --c++-kinds=+pl --fields=+iaS --extra=+q"
+let g:ctag_exe  = "ctags"
+
+map <C-\> :sp <CR>:exec("tag ".expand("<cword>"))<CR>   " Open tag in hoizontal split
+map <A-\> :vsp <CR>:exec("tag ".expand("<cword>"))<CR>  " Open tag in vertical split
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""" GreenHills MULTI
+"paths from multi have escaped backslashes
+"map <Leader>cd :cd %:p:h:gs/\\\\/\\/<CR>
+
+function! FixMultiPath()
+    edit %:t
+    bprevious
+    bdelete
+endfunction
+map <Leader>mu :call FixMultiPath()<CR>
 
