@@ -5,6 +5,21 @@ set nocompatible
 let mapleader=","
 nnoremap ; :
 
+set nobackup
+set nowritebackup
+set noswapfile
+
+""" GreenHills MULTI
+"paths from multi have escaped backslashes
+map <Leader>cd :cd %:p:h:gs/\\\\/\\/<CR>
+
+function! FixMultiPath()
+    edit %:t
+    bprevious
+    bdelete
+endfunction
+map <Leader>mu :call FixMultiPath()<CR>
+
 
 " quickly edit/reload vimrc
 nmap <silent> <leader>ev :e $MYVIMRC<cr>
@@ -18,10 +33,10 @@ noremap j gj
 noremap k gk
 
 """" Searching and Patterns
-set ignorecase							" search is case insensitive
-set smartcase							" search case sensitive if caps on
-set incsearch							" show best match so far
-set hlsearch							" Highlight matches to the search
+set ignorecase                          " search is case insensitive
+set smartcase                           " search case sensitive if caps on
+set incsearch                           " show best match so far
+set hlsearch                            " Highlight matches to the search
 nmap <silent> ,/ :nohlsearch            " clear highlights
 
 "toggle spell checking
@@ -30,16 +45,19 @@ map <leader>ss :setlocal spell!<cr>
 """" Display
 if has("gui_running")
     colorscheme inkpot
+    set sessionoptions+=resize,winpos
+    set lines=55 columns=130
+    set guifont=Consolas:h9:cANSI
 else
     colorscheme elflord
 endif
-set background=dark						" I use dark background
-"set lazyredraw							" Don't repaint when scripts are running
+set background=dark                     " I use dark background
+"set lazyredraw                         " Don't repaint when scripts are running
 set hidden                              " Allow unchanged buffers to hide
-set scrolloff=3							" Keep 3 lines below and above the cursor
-set ruler								" line numbers and column the cursor is on
-set number								" Show line numbering
-set numberwidth=1						" Use 1 col + 1 space for numbers
+set scrolloff=3                         " Keep 3 lines below and above the cursor
+set ruler                               " line numbers and column the cursor is on
+set number                              " Show line numbering
+set numberwidth=1                       " Use 1 col + 1 space for numbers
 " set title
 set titlestring=%F
 
@@ -47,32 +65,32 @@ set titlestring=%F
 set guitablabel=%N/\ %t\ %M
 
 """ Windows
-if exists(":tab")						" Try to move to other windows if changing buf
+if exists(":tab")                       " Try to move to other windows if changing buf
     set switchbuf=useopen,usetab
-else									" Try other windows & tabs if available
+else                                    " Try other windows & tabs if available
     set switchbuf=useopen
 endif
 
 """" Messages, Info, Status
-set shortmess+=a						" Use [+] [RO] [w] for modified, read-only, modified
-set showcmd								" Display what command is waiting for an operator
-set ruler								" Show pos below the win if there's no status line
-set laststatus=2						" Always show statusline, even if only 1 window
-set report=0							" Notify me whenever any lines have changed
-set confirm								" Y-N-C prompt if closing with unsaved changes
-set vb t_vb=							" Disable visual bell!  I hate that flashing.
+set shortmess+=a                        " Use [+] [RO] [w] for modified, read-only, modified
+set showcmd                             " Display what command is waiting for an operator
+set ruler                               " Show pos below the win if there's no status line
+set laststatus=2                        " Always show statusline, even if only 1 window
+set report=0                            " Notify me whenever any lines have changed
+set confirm                             " Y-N-C prompt if closing with unsaved changes
+set vb t_vb=                            " Disable visual bell!  I hate that flashing.
 "set statusline+=
 set statusline=%t[%{strlen(&fenc)?&fenc:'none'},%{&ff}]%h%m%r%y[%{fugitive#statusline()}]
 set statusline+=%=%{v:register}\ %c,%l/%L\ %P
 
 """" Editing
-set backspace=indent,eol,start  		" Backspace over anything! (Super backspace!)
-set showmatch							" Briefly jump to the previous matching paren
-set matchtime=2							" For .2 seconds
-set formatoptions-=tc					" I can format for myself, thank you very much
-set tabstop=4							" Tab stop of 4
-set shiftwidth=4						" sw 4 spaces (used on auto indent)
-set softtabstop=4						" 4 spaces as a tab for bs/del
+set backspace=indent,eol,start          " Backspace over anything! (Super backspace!)
+set showmatch                           " Briefly jump to the previous matching paren
+set matchtime=2                         " For .2 seconds
+set formatoptions-=tc                   " I can format for myself, thank you very much
+set tabstop=4                           " Tab stop of 4
+set shiftwidth=4                        " sw 4 spaces (used on auto indent)
+set softtabstop=4                       " 4 spaces as a tab for bs/del
 set expandtab
 " allow command line editing like emacs
 cnoremap <C-A>      <Home>
@@ -91,28 +109,32 @@ cnoremap <ESC><C-H> <C-W>
 "set guioptions=ac
 
 """" Coding
-set history=1000						" 1000 Lines of history
-set showfulltag							" Show more information while completing tags
-filetype plugin on						" Enable filetype plugins
-filetype plugin indent on				" Let filetype plugins indent for me
-syntax on								" Turn on syntax highlighting
+set history=1000                        " 1000 Lines of history
+set showfulltag                         " Show more information while completing tags
+filetype plugin on                      " Enable filetype plugins
+filetype plugin indent on               " Let filetype plugins indent for me
+syntax on                               " Turn on syntax highlighting
 
 " set up tags
 set tags=./tags;/
 set tags+=$HOME/.vim/tags/python.ctags
+"set tags+=$HOME/vimfiles/tags/python.ctags
+"set tags+=$HOME/vimfiles/tags/integrity.ctags
+
 " open tag in hoizontal split
 map <C-\> :sp <CR>:exec("tag ".expand("<cword>"))<CR>
 " open tag in vertical split
 map <A-\> :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
 
 let g:ctag_filename = "tags"
-let g:ctag_args = "-R --c++-kinds=+pl --fields=+iaS --extra=+q --language-force=C++"
+let g:ctag_args = "-R --append=yes --c-kinds=+pl --c++-kinds=+pl --fields=+iaS --extra=+q"
 let g:ctag_exe  = "ctags"
 function! UpdateTags()
     let tag_file = findfile("tags", ".;")
     if (filereadable(tag_file))
         echo "Updated tag file: " . tag_file
         let e = system(g:ctag_exe.' '.g:ctag_args.' -f '.tag_file.' '.expand('%'))
+        "let g:e = system(g:ctag_exe.' '.g:ctag_args.' -f C:"'.expand(tag_file).'" '.expand('%'))
     else
         echo "No tag file found"
     endif
@@ -125,11 +147,11 @@ au BufWritePost *.c,*.h :call UpdateTags()
 
 
 """"" Folding
-set foldmethod=syntax					" By default, use syntax to determine folds
-set foldlevelstart=99					" All folds open by default
+set foldmethod=syntax                   " By default, use syntax to determine folds
+set foldlevelstart=99                   " All folds open by default
 
 """" Command Line
-set wildmenu							" Autocomplete features in the status bar
+set wildmenu                            " Autocomplete features in the status bar
 set wildmode=list:longest
 set wildignore=*.o,*.obj,*.bak,*.exe,*.pyc,*.swp   " we don't want to edit these type of files
 
@@ -154,6 +176,7 @@ if has("autocmd")
 
         " Switch to the directory of the current file, unless it's a help file.
         au BufEnter * if &ft != 'help' | silent! cd %:p:h | endif
+        "autocmd BufEnter,BufReadPre * silent! cd %:p:h:gs/\\\\/\\/
 
         " Insert Vim-version as X-Editor in mail headers
         au FileType mail sil 1  | call search("^$")
@@ -179,10 +202,10 @@ endif
 imap jj <Esc>
 
 " toggle paste mode
-nmap ,p :set invpaste paste?<cr>
+nmap <leader>p :set invpaste paste?<cr>
 
 "set up retabbing on a source file
-nmap ,rr :1,$retab
+nmap <leader>rr :1,$retab<CR>
 
 " bind ctrl+space for omnicompletion
 inoremap <Nul> <C-x><C-o>
@@ -377,3 +400,25 @@ let g:yankring_history_dir = '~/.vim'
 
 let g:pep8_map='<leader>8'
 au FileType python let g:SuperTabDefaultCompletionType = "context"
+
+
+""" Lint
+au Filetype c set efm=%f:%l:%c:%m
+function! Lint()
+    new   "new buffer
+    exec 'silent r! "R:\Software\Private\PC-Lint_v9\lint\Lint-nt" -iC:\pc-lint\ std.lnt local.lnt *.c +b'
+    exe "normal ggdd"
+    caddb    "add content of buffer to quickfix
+    close    "close buffer
+    copen    "open quickfix
+endfunction
+function! Lint2()
+    call setqflist([])   "clear quickfix buffer
+    cgetexpr system('"R:\Software\Private\PC-Lint_v9\lint\Lint-nt" -iC:\pc-lint\ std.lnt local.lnt +b *.c')
+    copen
+endfunction
+map <Leader>lint :call Lint2()<CR>
+
+" clear quickfix
+map <Leader>cq :call setqflist([])<CR>
+
