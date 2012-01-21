@@ -317,7 +317,7 @@ endfunction
 augroup HaskellAuto
     au!
     au Filetype haskell compiler ghc 
-    au Filetype haskell set completeopt-=longest
+    au Filetype haskell setlocal completeopt-=longest
     au FileType haskell let g:SuperTabDefaultCompletionType = "<c-x><c-o>"
 augroup END
 
@@ -335,7 +335,7 @@ augroup ErlangAuto
     au!
     " We really want completion to use erlangcomplete#Complete (<c-x><c-o>)
     " first then use local keyword (<c-x><c-p>). Not sure how to do that
-    au FileType erlang set omnifunc=erlangcomplete#Complete
+    au FileType erlang setlocal omnifunc=erlangcomplete#Complete
     au FileType erlang let g:SuperTabDefaultCompletionType = "<c-x><c-o>"
 augroup END
 
@@ -350,12 +350,12 @@ let g:erlangCompleteFile = "~/.vim/bundle/vimerl/autoload/erlang_complete.erl"
 augroup PythonAuto
     au!
     au BufWritePre *.py call StripTrailingWhitespace()
-    au Filetype python set omnifunc=pythoncomplete#Complete
-    au Filetype python set completefunc=pythoncomplete#Complete
+    au Filetype python setlocal omnifunc=pythoncomplete#Complete
+    au Filetype python setlocal completefunc=pythoncomplete#Complete
 
-    au Filetype python set smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class,with
-    au FileType python set makeprg=python\ -c\ \"import\ py_compile,sys;\ sys.stderr=sys.stdout;\ py_compile.compile(r'%')\"
-    au FileType python set expandtab
+    au Filetype python setlocal smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class,with
+    au FileType python setlocal makeprg=python\ -c\ \"import\ py_compile,sys;\ sys.stderr=sys.stdout;\ py_compile.compile(r'%')\"
+    au FileType python setlocal expandtab
     au FileType python inoremap # #         " Don't outdent hashes
 
     map <leader>j :RopeGotoDefinition<CR>
@@ -373,13 +373,13 @@ augroup CAuto
     au BufWritePre *.c,*.h call StripTrailingWhitespace()
     au BufWritePost *.c,*.h call UpdateTags()  " Update tags of current c/h file when saving
     "au FileType c set omnifunc=syntaxcomplete#Complete
-    au FileType c set completefunc=syntaxcomplete#Complete
+    au FileType c setlocal completefunc=syntaxcomplete#Complete
     au FileType c let g:SuperTabDefaultCompletionType = "<c-x><c-o>"
     au FileType c let g:SuperTabContextDefaultCompletionType = "<c-x><c-p>"
-    au Filetype c set completeopt=menuone,longest,preview
+    au Filetype c setlocal completeopt=menuone,longest,preview
     " Use :make to compile c, even without a makefile
     au FileType c,cpp if glob('Makefile') == "" | let &mp="gcc -o %< %" | endif
-    au Filetype c set efm=%f:%l:%c:%m       " Lint compatible
+    au Filetype c setlocal efm=%f:%l:%c:%m       " Lint compatible
 augroup END
 
 function! Lint()
