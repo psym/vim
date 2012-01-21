@@ -70,6 +70,7 @@ set history=1000                        " 1000 Lines of history
 set showfulltag                         " Show more information while completing tags
 set foldmethod=indent                   " Allow folding on indents
 set foldlevel=99                        " Don't fold by default
+set foldlevelstart=99                   " Don't fold by default
 
 """ Reading/Writing
 set nobackup                        " No backups
@@ -155,7 +156,8 @@ inoremap <Down> <C-R>=pumvisible() ? "\<lt>C-N>" : "\<lt>Down>"<CR>
 
 nnoremap <leader>l :call ToggleRelativeAbsoluteNumber()<CR>
 nmap <leader>sb :call SplitScroll()<CR>     " Vsplit with syncronized scrolling
-map <C-F12> :call UpdateTags()<CR>          " Build tags of cur dir with CTRL+F12
+map <C-F12> :call UpdateTags()<CR>          " Update tags of current file
+command! Ctag :call CreateTags()<CR>    " Build tags of current file
 
 imap <C-W> <C-O><C-W>               " Window commands work in insert mode
 noremap <silent> <leader>h :wincmd h<cr>   " Move the cursor to the window left of the current one
@@ -242,10 +244,14 @@ if &term =~ '^screen'
     set t_fs=\
 endif
 
-set completeopt+=longest    " Only complete longest common
-"let g:SuperTabDefaultCompletionType = "<c-x><c-u>"      " Default onmi-complete
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""" Completion
 let g:SuperTabDefaultCompletionType = "context"
+let g:SuperTabContextDefaultCompletionType = "<c-x><c-p>"
 let g:SuperTabLongestEnhanced=1
+let g:SuperTabRetainCompletionDuration = 'completion'
+set completeopt=menuone,longest,preview
 
 let g:yankring_history_dir = '~/.vim'
 
@@ -262,6 +268,13 @@ function! UpdateTags()
     else
         echo "No tag file found"
     endif
+endfunction
+
+" Create tags file
+function! CreateTags()
+    let tag_file = expand('%:h') .'/'. g:ctag_filename
+    echo "Creating tag file: " . tag_file
+    let e = system(g:ctag_exe.' '.g:ctag_args.' -f '.tag_file.' '.expand('%'))
 endfunction
 
 " Vertical split current file with syncronized scrolling
@@ -320,6 +333,9 @@ let g:haddock_indexfiledir="/tmp/haddock/"
 """ Erlang
 augroup ErlangAuto
     au!
+    " We really want completion to use erlangcomplete#Complete (<c-x><c-o>)
+    " first then use local keyword (<c-x><c-p>). Not sure how to do that
+    au FileType erlang set omnifunc=erlangcomplete#Complete
     au FileType erlang let g:SuperTabDefaultCompletionType = "<c-x><c-o>"
 augroup END
 
@@ -329,15 +345,21 @@ let g:erlangCompleteFile = "~/.vim/bundle/vimerl/autoload/erlang_complete.erl"
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """ Python
+"site package tags: ctags -R -f ~/.vim/tags/python.ctags `python -c "from
+"distutils.sysconfig import get_python_lib; print get_python_lib()`
 augroup PythonAuto
     au!
     au BufWritePre *.py call StripTrailingWhitespace()
     au Filetype python set omnifunc=pythoncomplete#Complete
-    au Filetype python set completeopt=menuone,longest,preview
+    au Filetype python set completefunc=pythoncomplete#Complete
+
     au Filetype python set smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class,with
     au FileType python set makeprg=python\ -c\ \"import\ py_compile,sys;\ sys.stderr=sys.stdout;\ py_compile.compile(r'%')\"
     au FileType python set expandtab
     au FileType python inoremap # #         " Don't outdent hashes
+
+    map <leader>j :RopeGotoDefinition<CR>
+    map <leader>r :RopeRename<CR>
 augroup END
 
 let g:pyflakes_use_quickfix=0           "Using quickfix breaks pep8
@@ -351,7 +373,10 @@ augroup CAuto
     au BufWritePre *.c,*.h call StripTrailingWhitespace()
     au BufWritePost *.c,*.h call UpdateTags()  " Update tags of current c/h file when saving
     "au FileType c set omnifunc=syntaxcomplete#Complete
+    au FileType c set completefunc=syntaxcomplete#Complete
     au FileType c let g:SuperTabDefaultCompletionType = "<c-x><c-o>"
+    au FileType c let g:SuperTabContextDefaultCompletionType = "<c-x><c-p>"
+    au Filetype c set completeopt=menuone,longest,preview
     " Use :make to compile c, even without a makefile
     au FileType c,cpp if glob('Makefile') == "" | let &mp="gcc -o %< %" | endif
     au Filetype c set efm=%f:%l:%c:%m       " Lint compatible
@@ -373,7 +398,7 @@ set tags+=$HOME/.vim/tags/python.ctags
 "set tags+=$HOME/vimfiles/tags/integrity.ctags
 
 let g:ctag_filename = "tags"
-let g:ctag_args = "-R --append=yes --c-kinds=+pl --c++-kinds=+pl --fields=+iaS --extra=+q"
+let g:ctag_args = "-R --append=yes --python-kinds=-i --c-kinds=+pl --c++-kinds=+pl --fields=+iaS --extra=+q"
 let g:ctag_exe  = "ctags"
 
 map <C-\> :sp <CR>:exec("tag ".expand("<cword>"))<CR>   " Open tag in hoizontal split
