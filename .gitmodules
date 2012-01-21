@@ -1,7 +1,7 @@
 [submodule "bundle/fugitive"]
 	path = bundle/fugitive
 	url = http://github.com/tpope/vim-fugitive.git
-    ignore = dirty
+	ignore = dirty
 [submodule "bundle/vim-rebar"]
 	path = bundle/vim-rebar
 	url = http://github.com/mbbx6spp/vim-rebar
@@ -14,14 +14,14 @@
 [submodule "bundle/vim-git"]
 	path = bundle/vim-git
 	url = http://github.com/tpope/vim-git
-    ignore = dirty
+	ignore = dirty
 [submodule "bundle/supertab"]
 	path = bundle/supertab
 	url = http://github.com/ervandew/supertab.git
 [submodule "bundle/yankring"]
 	path = bundle/yankring
 	url = git://github.com/vim-scripts/YankRing.vim
-    ignore = dirty
+	ignore = dirty
 [submodule "bundle/a"]
 	path = bundle/a
 	url = http://github.com/vim-scripts/a.vim
@@ -37,7 +37,7 @@
 [submodule "bundle/syntastic"]
 	path = bundle/syntastic
 	url = http://github.com/scrooloose/syntastic
-    ignore = dirty
+	ignore = dirty
 [submodule "bundle/haskellmode-vim"]
 	path = bundle/haskellmode-vim
 	url = git://github.com/lukerandall/haskellmode-vim.git
@@ -47,11 +47,11 @@
 [submodule "bundle/pyflakes"]
 	path = bundle/pyflakes
 	url = https://github.com/mitechie/pyflakes-pathogen.git
-    ignore = dirty
+	ignore = dirty
 [submodule "bundle/OmniCppComplete"]
 	path = bundle/OmniCppComplete
 	url = https://github.com/vim-scripts/OmniCppComplete.git
-    ignore = dirty
+	ignore = dirty
 [submodule "bundle/pydoc"]
 	path = bundle/pydoc
 	url = https://github.com/fs111/pydoc.vim.git
@@ -64,6 +64,7 @@
 [submodule "bundle/erlang-skel"]
 	path = bundle/erlang-skel
 	url = git://github.com/vim-scripts/vim-erlang-skeleteons.git
+	ignore = dirty
 [submodule "bundle/pep8"]
 	path = bundle/pep8
 	url = https://github.com/nvie/vim-pep8.git
