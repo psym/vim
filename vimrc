@@ -357,13 +357,13 @@ augroup PythonAuto
     au FileType python setlocal makeprg=python\ -c\ \"import\ py_compile,sys;\ sys.stderr=sys.stdout;\ py_compile.compile(r'%')\"
     au FileType python setlocal expandtab
     au FileType python inoremap # #         " Don't outdent hashes
+    au FileType python map <buffer> <leader>8 :call Pep8()<CR>
 
     map <leader>j :RopeGotoDefinition<CR>
     map <leader>r :RopeRename<CR>
 augroup END
 
 let g:pyflakes_use_quickfix=0           "Using quickfix breaks pep8
-let g:pep8_map='<leader>8'
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
