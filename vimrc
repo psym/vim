@@ -24,7 +24,7 @@ if has("gui_running")
     set guitablabel=%N/\ %t\ %M         " tab labels show the filename without path(tail)
 
     set guioptions+=c                   " Use console dialogs instead of popups
-    set guioptions+=a 
+    set guioptions+=a
     set guioptions-=T                   " No toolbar
 else
     colorscheme elflord
@@ -134,18 +134,20 @@ noremap j gj
 noremap k gk
 
 nnoremap ; :
-imap jj <Esc>                               " jj in insert mode switches to normal
-nmap <leader>p :set invpaste paste?<cr>     " toggle paste mode
-nmap <leader>rr :1,$retab<CR>               " Retab file
-nmap <F4> :TlistToggle<CR>                  " Toggle the tag list bar
+imap jj <Esc>
+nmap <leader>p :set invpaste paste?<cr>
+nmap <leader>rr :1,$retab<CR>
+nmap <F4> :TlistToggle<CR>
 map - :Explore<cr>
 cmap w!! %!sudo tee > /dev/null %
 
-nmap <leader>c :copen<CR>                   " Open quickfix window
-nmap <leader>cc :cclose<CR>                 " Close quickfix window
-nmap <leader>cq :call setqflist([])<CR>     " Clear quickfix window
+""" Open/Close/Clear quickfix window
+nmap <leader>c :copen<CR>
+nmap <leader>cc :cclose<CR>
+nmap <leader>cq :call setqflist([])<CR>
 
-map <leader>ss :setlocal spell!<cr>     " Toggle spell checking
+" Toggle spell checking
+map <leader>ss :setlocal spell!<cr>
 
 " bind ctrl+space for omnicompletion
 inoremap <Nul> <C-x><C-o>
@@ -155,26 +157,29 @@ imap <c-space> <c-x><c-o>
 inoremap <Down> <C-R>=pumvisible() ? "\<lt>C-N>" : "\<lt>Down>"<CR>
 
 nnoremap <leader>l :call ToggleRelativeAbsoluteNumber()<CR>
-nmap <leader>sb :call SplitScroll()<CR>     " Vsplit with syncronized scrolling
-map <C-F12> :call UpdateTags()<CR>          " Update tags of current file
-command! Ctag :call CreateTags()<CR>    " Build tags of current file
+" Vertical split with synchronized scrolling
+nmap <leader>sb :call SplitScroll()<CR>
+map <C-F12> :call UpdateTags()<CR>
+command! Ctag :call CreateTags()<CR>
 
-imap <C-W> <C-O><C-W>               " Window commands work in insert mode
-noremap <silent> <leader>h :wincmd h<cr>   " Move the cursor to the window left of the current one
-noremap <silent> <leader>j :wincmd j<cr>   " Move the cursor to the window below the current one
-noremap <silent> <leader>k :wincmd k<cr>   " Move the cursor to the window above the current one
-noremap <silent> <leader>l :wincmd l<cr>   " Move the cursor to the window right of the current one
-
-noremap <silent> <leader>cj :wincmd j<cr>:close<cr>    " Close the window below this one
-noremap <silent> <leader>ck :wincmd k<cr>:close<cr>    " Close the window above this one
-noremap <silent> <leader>ch :wincmd h<cr>:close<cr>    " Close the window to the left of this one
-noremap <silent> <leader>cl :wincmd l<cr>:close<cr>    " Close the window to the right of this one
-noremap <silent> <leader>cc :close<cr>                 " Close the current window
-
-noremap <silent> <leader>ml <C-W>L     " Move the current window to the right of the main Vim window
-noremap <silent> <leader>mk <C-W>K     " Move the current window to the top of the main Vim window
-noremap <silent> <leader>mh <C-W>H     " Move the current window to the left of the main Vim window
-noremap <silent> <leader>mj <C-W>J     " Move the current window to the bottom of the main Vim window
+" Window commands in insert mode
+imap <C-W> <C-O><C-W>
+" Move cursor to window left/below/above/right
+noremap <silent> <leader>h :wincmd h<cr>
+noremap <silent> <leader>j :wincmd j<cr>
+noremap <silent> <leader>k :wincmd k<cr>
+noremap <silent> <leader>l :wincmd l<cr>
+" Close window left/below/above/right/current
+noremap <silent> <leader>ch :wincmd h<cr>:close<cr>
+noremap <silent> <leader>cj :wincmd j<cr>:close<cr>
+noremap <silent> <leader>ck :wincmd k<cr>:close<cr>
+noremap <silent> <leader>cl :wincmd l<cr>:close<cr>
+noremap <silent> <leader>cc :close<cr>
+" Move window left/below/above/right
+noremap <silent> <leader>mh <C-W>H
+noremap <silent> <leader>mj <C-W>J
+noremap <silent> <leader>mk <C-W>K
+noremap <silent> <leader>ml <C-W>L
 
 " Ctrl + Arrows - Move around quickly
 nnoremap  <c-up>     {
@@ -192,8 +197,9 @@ nnoremap  <s-left>   vh
 nmap <leader>tn :tabnext<cr>
 nmap <leader>tp :tabprevious<cr>
 nmap <leader>te :tabedit<cr>
-nnoremap  <a-right>  gt             " Next tab right
-nnoremap  <a-left>   gT             " Next tab left
+" Next/previous tab
+nnoremap  <a-right>  gt
+nnoremap  <a-left>   gT
 
 if &diff
     " easily handle diffing
@@ -214,29 +220,42 @@ nmap <leader>gd :Gdiff<cr>
 
 
 " Extra functionality for some existing commands:
-nnoremap <C-6> <C-6>`"          " <C-6> switches back to the alternate file and the correct column in the line.
-nnoremap <C-g> 2<C-g>           " CTRL-g shows filename and buffer number, too.
-nnoremap q: q:iq<esc>           " I hate hitting q: instead of :q
-nnoremap <silent> <C-l> :nohl<CR><C-l>  " <C-l> redraws the screen and removes any search highlighting.
-noremap Q gq                    " Q formats paragraphs, instead of entering ex mode
+" <C-6> switches back to the alternate file and the correct column in the line.
+nnoremap <C-6> <C-6>`"
+" CTRL-g shows filename and buffer number, too.
+nnoremap <C-g> 2<C-g>
+" <C-l> redraws the screen and removes any search highlighting.
+nnoremap <silent> <C-l> :nohl<CR><C-l>
+" Q formats paragraphs, instead of entering ex mode
+noremap Q gq
+" Visual mode search next/previous
+vnoremap * y/<C-R>"<CR>
+vnoremap # y?<C-R>"<CR>
 
-vnoremap * y/<C-R>"<CR>         " * search next in visual
-vnoremap # y?<C-R>"<CR>         " # search previous in visual
+" <space> toggles folds opened and closed
+nnoremap <space> za
+" <space> in visual mode creates a fold over the marked range
+vnoremap <space> zf
 
-nnoremap <space> za             " <space> toggles folds opened and closed
-vnoremap <space> zf             " <space> in visual mode creates a fold over the marked range
+" Delete Empty Lines
+map <leader>del :g/^\s*$/d<CR>
+" Delete Double Quoted Lines
+map <leader>ddql :%s/^>\s*>.*//g<CR>
+" Delete Dot Runs
+map <leader>ddr :s/\.\+\s*/. /g<CR>
+" Delete Space Runs
+map <leader>dsr :s/\s\s\+/ /g<CR>
+" Delete Trailing Whitespace
+map <leader>dtw :call StripTrailingWhitespace()<CR>
 
-
-map <leader>del :g/^\s*$/d<CR>          " Delete Empty Lines
-map <leader>ddql :%s/^>\s*>.*//g<CR>    " Delete Double Quoted Lines
-map <leader>ddr :s/\.\+\s*/. /g<CR>     " Delete Dot Runs
-map <leader>dsr :s/\s\s\+/ /g<CR>       " Delete Space Runs
-map <leader>dtw :%s/\s\+$//g<CR>        " Delete Trailing Whitespace
-
-noremap <leader>= gg=G                  " Reindent everything
-noremap <leader>gp gqap                 " Reformat paragraph
-noremap <leader>gq gggqG                " Reformat everything
-noremap <leader>gg ggVG                 " Select everything
+" Reindent everything
+noremap <leader>= gg=G
+" Reformat paragraph
+noremap <leader>gp gqap
+" Reformat everything
+noremap <leader>gq gggqG
+" Select everything
+noremap <leader>gg ggVG
 
 " Allow setting window title for screen
 if &term =~ '^screen'
@@ -294,7 +313,7 @@ function! StripTrailingWhitespace()
     call winrestview(l:winview)
 endfunction
 
-" Toggle between absolute and relative numbering 
+" Toggle between absolute and relative numbering
 function! ToggleRelativeAbsoluteNumber()
     if &number
         set relativenumber
@@ -309,14 +328,14 @@ function! RestoreCursor()
         return 1
     endif
 endfunction
-     
+
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """ Haskell
 augroup HaskellAuto
     au!
-    au Filetype haskell compiler ghc 
+    au Filetype haskell compiler ghc
     au Filetype haskell setlocal completeopt-=longest
     au FileType haskell let g:SuperTabDefaultCompletionType = "<c-x><c-o>"
 augroup END
@@ -356,7 +375,8 @@ augroup PythonAuto
     au Filetype python setlocal smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class,with
     au FileType python setlocal makeprg=python\ -c\ \"import\ py_compile,sys;\ sys.stderr=sys.stdout;\ py_compile.compile(r'%')\"
     au FileType python setlocal expandtab
-    au FileType python inoremap # #         " Don't outdent hashes
+    " Don't outdent hashes
+    au FileType python inoremap # #
     au FileType python map <buffer> <leader>8 :call Pep8()<CR>
 
     map <leader>j :RopeGotoDefinition<CR>
@@ -402,8 +422,9 @@ let g:ctag_filename = "tags"
 let g:ctag_args = "-R --append=yes --python-kinds=-i --c-kinds=+pl --c++-kinds=+pl --fields=+iaS --extra=+q"
 let g:ctag_exe  = "ctags"
 
-map <C-\> :sp <CR>:exec("tag ".expand("<cword>"))<CR>   " Open tag in hoizontal split
-map <A-\> :vsp <CR>:exec("tag ".expand("<cword>"))<CR>  " Open tag in vertical split
+" Open tag in horizontal/vertical split
+map <C-\> :sp <CR>:exec("tag ".expand("<cword>"))<CR>
+map <A-\> :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
