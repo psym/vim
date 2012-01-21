@@ -363,7 +363,8 @@ augroup PythonAuto
     map <leader>r :RopeRename<CR>
 augroup END
 
-let g:pyflakes_use_quickfix=0           "Using quickfix breaks pep8
+let g:pyflakes_use_quickfix = 0         " Using quickfix breaks pep8
+let g:pep8_args = "--ignore=E501"       " Ignore 'line too long'
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
