@@ -165,10 +165,10 @@ command! Ctag :call CreateTags()<CR>
 " Window commands in insert mode
 imap <C-W> <C-O><C-W>
 " Move cursor to window left/below/above/right
-noremap <silent> <leader>h :wincmd h<cr>
-noremap <silent> <leader>j :wincmd j<cr>
-noremap <silent> <leader>k :wincmd k<cr>
-noremap <silent> <leader>l :wincmd l<cr>
+"noremap <silent> <leader>h :wincmd h<cr>
+"noremap <silent> <leader>j :wincmd j<cr>
+"noremap <silent> <leader>k :wincmd k<cr>
+"noremap <silent> <leader>l :wincmd l<cr>
 " Close window left/below/above/right/current
 noremap <silent> <leader>ch :wincmd h<cr>:close<cr>
 noremap <silent> <leader>cj :wincmd j<cr>:close<cr>
