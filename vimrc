@@ -1,8 +1,15 @@
-call pathogen#runtime_append_all_bundles()
-call pathogen#helptags()
-
 set nocompatible
+set encoding=utf-8
 let mapleader=","
+
+let g:pathogen_disabled = []
+if has('python') && executable('clang')
+    let g:pathogen_disabled += ['omnicppcomplete']
+else
+    let g:pathogen_disabled += ['clang_complete']
+endif
+call pathogen#infect()
+
 
 syntax on                       " Turn on syntax highlighting
 filetype plugin on              " Enable filetype plugins
@@ -111,6 +118,9 @@ cnoremap <ESC><C-H> <C-W>
 """" Autocommands
 augroup vimrcEx
     au!
+    " Automatically delete fugitive buffers when leaving them
+    au BufReadPost fugitive://* setlocal bufhidden=delete
+
     " In plain-text files and svn/git commit buffers, wrap automatically at 78 chars
     au FileType text,svn,gitcommit setlocal tw=78 fo+=t
 
