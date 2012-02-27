@@ -26,8 +26,8 @@ set background=dark                     " I use dark background
 if has("gui_running")
     colorscheme inkpot
     set sessionoptions+=resize,winpos
-    set lines=55 columns=130
-    set guifont=Consolas:h9:cANSI
+    set lines=55 columns=110
+    "set guifont=Consolas:h9:cANSI
     set guitablabel=%N/\ %t\ %M         " tab labels show the filename without path(tail)
 
     set guioptions+=c                   " Use console dialogs instead of popups
@@ -78,6 +78,9 @@ set showfulltag                         " Show more information while completing
 set foldmethod=indent                   " Allow folding on indents
 set foldlevel=99                        " Don't fold by default
 set foldlevelstart=99                   " Don't fold by default
+if exists("+colorcolumn")
+    set colorcolumn=100
+endif
 
 """ Reading/Writing
 set nobackup                        " No backups
@@ -345,14 +348,14 @@ endfunction
 """ Haskell
 augroup HaskellAuto
     au!
-    au Filetype haskell compiler ghc
-    au Filetype haskell setlocal completeopt-=longest
+    au BufEnter *.hs compiler ghc
+    "au Filetype haskell setlocal completeopt-=longest
     au FileType haskell let g:SuperTabDefaultCompletionType = "<c-x><c-o>"
 augroup END
 
-let g:ghc = "/usr/bin/ghc"
-let g:haddock_docdir = "/Library/Haskell/doc/"
-"Mac
+"let g:ghc = "/usr/bin/ghc"
+let g:haddock_docdir = "~/Library/Haskell/doc/"
+""Mac
 let g:haddock_browser = "open"
 let g:haddock_browser_callformat = "%s %s"
 let g:haddock_indexfiledir="/tmp/haddock/"
