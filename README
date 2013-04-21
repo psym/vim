@@ -1,11 +1,11 @@
 Installation:
 
-    git clone git://n7700/vim.git ~/.vim
+    git clone git://github.com/psym/vim.git ~/.vim
 
 Create symlinks:
 
     ln -s ~/.vim/vimrc ~/.vimrc
-    ln -s ~/.vim/gvimrc ~/.gvimrc
+    ln -s ~/.vim/vimrc ~/.gvimrc
 
 Switch to the `~/.vim` directory, and fetch submodules:
 
